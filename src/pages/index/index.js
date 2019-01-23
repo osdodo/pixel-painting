@@ -233,14 +233,6 @@ class Index extends Component {
         ctx.draw()
     }
 
-    onReward() {
-        wx.navigateToMiniProgram({
-            appId: 'wx18a2ac992306a5a4',
-            path: 'pages/apps/largess/detail?id=pUMq4vLUENQ%3D',
-            success(res) { }
-        })
-    }
-
     render() {
         this.drawLine()
         const { showGrid } = this.props
@@ -291,12 +283,6 @@ class Index extends Component {
                         推荐好友
                     </Button>
                     <Text className='iconfont icon-shuxian-copy-copy' style='font-size: 20px;'></Text>
-                    <Button 
-                        className='reward-button'
-                        onClick={this.onReward}
-                    >
-                        赞赏开发者
-                    </Button>
                 </View>
             </View>
         )
