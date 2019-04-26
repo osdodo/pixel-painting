@@ -6,36 +6,35 @@ import {
     showSettingSwitch, 
     changeBrushWidth, 
     changeBrushColor 
-} from '../../../actions/brushSettings'
+} from '../../actions/brushSettings'
 
 import './BrushSetting.css'
-import '../../../iconfont.css'
+import '../../iconfont.css'
 
 @connect(
     ({ brushSettings }) => brushSettings,
     dispatch => ({
-        onShowSettingSwitch() {
+        handleShowSettingSwitch() {
             dispatch(showSettingSwitch())
         },
-        onChangeBrushWidth(e) {
+        handleChangeBrushWidth(e) {
             dispatch(changeBrushWidth(e.detail.value))
         },
-        onChangeBrushColor(e) {
+        handleChangeBrushColor(e) {
             const brushColor = {}
             brushColor[e.target.dataset.color] = e.detail.value
             dispatch(changeBrushColor(brushColor))
         }
     })
 )
-
 class BrushSetting extends Component {
  
     render() {
         const {
-            isShowPenSetting, onShowSettingSwitch,
-            brushW, onChangeBrushWidth,
-            brushColor, onChangeBrushColor,
-            isiPhoneX
+            isShowPenSetting, handleShowSettingSwitch,
+            brushW, handleChangeBrushWidth,
+            brushColor, handleChangeBrushColor,
+            isIPhoneX
         } = this.props
 
         const { red, green, blue, alpha } = brushColor
@@ -43,7 +42,7 @@ class BrushSetting extends Component {
         let penSettingStyle = isShowPenSetting
             ? 'transition: transform 800ms ease 0ms; transform: translateX(0px); transform-origin: 50% 50% 0px;'
             : 'transition: transform 800ms ease 0ms; transform: translateX(-1100px); transform-origin: 50% 50% 0px;'
-        if (isiPhoneX) {
+        if (isIPhoneX) {
             penSettingStyle = penSettingStyle + 'bottom: 20px;'
         }
         return (
@@ -64,7 +63,7 @@ class BrushSetting extends Component {
                             blockColor='#FFFFFF'
                             activeColor='#FFFFFF'
                             value={brushW}
-                            onChanging={onChangeBrushWidth}
+                            onChanging={handleChangeBrushWidth}
                         />
                     </View>
                     <View className='slider-box'>
@@ -80,7 +79,7 @@ class BrushSetting extends Component {
                             activeColor='#FFFFFF'
                             value={red}
                             dataColor='red'
-                            onChanging={onChangeBrushColor}
+                            onChanging={handleChangeBrushColor}
                         />
                     </View>
                     <View className='slider-box'>
@@ -96,7 +95,7 @@ class BrushSetting extends Component {
                             activeColor='#FFFFFF'
                             value={green}
                             dataColor='green'
-                            onChanging={onChangeBrushColor}
+                            onChanging={handleChangeBrushColor}
                         />
                     </View>
                     <View className='slider-box'>
@@ -112,7 +111,7 @@ class BrushSetting extends Component {
                             activeColor='#FFFFFF'
                             value={blue}
                             dataColor='blue'
-                            onChanging={onChangeBrushColor}
+                            onChanging={handleChangeBrushColor}
                         />
                     </View>
                     <View className='slider-box'>
@@ -128,13 +127,13 @@ class BrushSetting extends Component {
                             activeColor='#FFFFFF'
                             value={alpha}
                             dataColor='alpha'
-                            onChanging={onChangeBrushColor}
+                            onChanging={handleChangeBrushColor}
                         />
                     </View>
                     <Text 
                         className='iconfont icon-shouqi4-copy'
                         style='font-size: 20px;'
-                        onClick={onShowSettingSwitch}
+                        onClick={handleShowSettingSwitch}
                     >
                     </Text>
                 </View>

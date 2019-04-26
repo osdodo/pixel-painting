@@ -1,13 +1,13 @@
-import { Component } from '@tarojs/taro'
+import Taro, { Component } from '@tarojs/taro'
 import { View, Canvas, Button, Text } from '@tarojs/components'
-
-import { drawRect, clearRect, getImageData } from '../../utils/utils'
-
-import ToolBox from '../../components/toolBox/ToolBox'
+import ToolBox from '../../components/ToolBox/ToolBox'
 
 import { connect } from '@tarojs/redux'
 import { changeBrushColor } from '../../actions/brushSettings'
-import { initCanvas , showBackgroundSettingSwitch, backgroundSwitch } from '../../actions/canvasSettings'
+import { initCanvas, showBackgroundSettingSwitch, backgroundSwitch } from '../../actions/canvasSettings'
+
+import { drawCanvas, getImageData, drawGrid, drawLine } from '../../utils/wx-tool'
+import { backgroundLayerId, gridLayerId, dividinglineLayerId, drawLayerId } from '../../canvas-config'
 
 import './index.css'
 import '../../iconfont.css'
@@ -33,13 +33,9 @@ import logo from '../../image/logo.png'
         }
     })
 )
-
 class Index extends Component {
     state = {
-        isiPhoneX: false 
-    }
-    constructor(props) {
-        super(props)
+        isIPhoneX: false 
     }
 
     config = {
@@ -51,35 +47,27 @@ class Index extends Component {
     componentWillMount() {
         const { initCanvas } = this.props
         try {
-            const systemInfo = wx.getSystemInfoSync()
+            const systemInfo = Taro.getSystemInfoSync()
             if (systemInfo.model.indexOf('iPhone X') != -1) {
                 this.setState({
-                    isiPhoneX: true
+                    isIPhoneX: true
                 })
             }
             initCanvas({
-                ctx: wx.createCanvasContext('canvas'),
+                ctx: Taro.createCanvasContext(drawLayerId),
                 canvasW: systemInfo.windowWidth * 2
             })
         } catch (e) {
             initCanvas({
-                ctx: wx.createCanvasContext('canvas'),
+                ctx: Taro.createCanvasContext(drawLayerId),
                 canvasW: 750
             })
         }
-        this.drawGrid(this.props.brushW)
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.brushW !== nextProps.brushW) {
-            this.drawGrid(nextProps.brushW)
-        }
-    }
-
-    onTouchStart(e) {
-        const { isChooseColorPickingTool, changeBrushColor } = this.props
-        if (isChooseColorPickingTool) {
-            getImageData('canvas', e.touches[0].x, e.touches[0].y, 1, 1).then(data => {
+    handleTouchStart = e => {
+        if (this.props.isChooseColorPickingTool) {
+            getImageData(drawLayerId, e.touches[0].x, e.touches[0].y, 1, 1).then(data => {
                 const r = data[0]
                 const g = data[1]
                 const b = data[2]
@@ -87,7 +75,7 @@ class Index extends Component {
 
                 if (a >= 0.1) {
                     if (!(r > 250 && g > 250 && b > 250)) {
-                        changeBrushColor({
+                        this.props.changeBrushColor({
                             red: r,
                             green: g,
                             blue: b,
@@ -98,177 +86,81 @@ class Index extends Component {
             })
         }
         else {
-            this.drawCanvas(e.touches[0].x, e.touches[0].y)
+            const { 
+                canvas: { ctx, canvasW }, 
+                brushW,
+                brushColor, 
+                dividingLineType, 
+                isChooseEraser, 
+                eraserW
+            } = this.props
+            drawCanvas(
+                ctx, canvasW,
+                e.touches[0].x, e.touches[0].y, 
+                brushW, brushColor, 
+                dividingLineType, 
+                isChooseEraser, eraserW
+            )
         }
     }
 
-    onTouchMove(e) {
-        const { isChooseColorPickingTool } = this.props
-        if (isChooseColorPickingTool) return
-        this.drawCanvas(e.touches[0].x, e.touches[0].y)
-    }
-
-    drawCanvas(touchX, touchY) {
-        const {
-            canvas,
-            brushW, brushColor,
-            dividingLineType,
-            isChooseEraser, eraserW,
+    handleTouchMove = e => {
+        if ( this.props.isChooseColorPickingTool) return
+        const { 
+            canvas: { ctx, canvasW },
+            brushW,
+            brushColor, 
+            dividingLineType, 
+            isChooseEraser, 
+            eraserW
         } = this.props
-
-        const { ctx, canvasW } = canvas
-        const { red, green, blue, alpha } = brushColor
-        const x = Number((touchX / brushW).toFixed(0)) * brushW
-        const y = Number((touchY / brushW).toFixed(0)) * brushW
-        const color = `rgba(${red}, ${green}, ${blue}, ${alpha})`
-
-        if (isChooseEraser) { clearRect(ctx, x, y, eraserW, eraserW) }
-        else { drawRect(ctx, x, y, brushW, brushW, color) }
-
-        if (dividingLineType !== 0) {
-            let c = canvasW / 4
-            let x2_ = x - c
-            let x2 = 0
-            let y2_ = y - c
-            let y2 = 0
-            if (dividingLineType === 1) {
-
-                if (x2_ < 0) { x2 = c + x2_ * (-1) - brushW }
-                else { x2 = c - x2_ - brushW }
-
-                if (isChooseEraser) { clearRect(ctx, x2, y, eraserW, eraserW) }
-                else { drawRect(ctx, x2, y, brushW, brushW, color) }
-
-            }
-            else if (dividingLineType === 2) {
-
-                if (y2_ < 0) { y2 = c + y2_ * (-1) - brushW }
-                else { y2 = c - y2_ - brushW }
-
-                if (isChooseEraser) { clearRect(ctx, x, y2, eraserW, eraserW) }
-                else { drawRect(ctx, x, y2, brushW, brushW, color) }
-
-            }
-            else if (dividingLineType === 3) {
-
-                if (x2_ < 0) { x2 = c + x2_ * (-1) - brushW }
-                else { x2 = c - x2_ - brushW }
-
-                if (y2_ < 0) { y2 = c + y2_ * (-1) - brushW }
-                else { y2 = c - y2_ - brushW }
-
-                if (isChooseEraser) {
-                    clearRect(ctx, x2, y, eraserW, eraserW)
-                    clearRect(ctx, x, y2, eraserW, eraserW)
-                    clearRect(ctx, x2, y2, eraserW, eraserW)
-                }
-                else {
-                    drawRect(ctx, x2, y, brushW, brushW, color)
-                    drawRect(ctx, x, y2, brushW, brushW, color)
-                    drawRect(ctx, x2, y2, brushW, brushW, color)
-                }
-            }
-        }
-    }
-
-    drawGrid(brushW) {
-        const ctx = wx.createCanvasContext('grid')
-        const { canvasW } = this.props.canvas
-        ctx.save()
-        ctx.setStrokeStyle('lightgray')
-        ctx.setLineWidth(0.5)
-        for (let i = brushW + 0.5; i < canvasW; i = i + brushW) {
-            ctx.beginPath()
-            ctx.moveTo(i, 0)
-            ctx.lineTo(i, canvasW)
-            ctx.stroke()
-        }
-        for (let i = brushW + 0.5; i < canvasW; i = i + brushW) {
-            ctx.beginPath()
-            ctx.moveTo(0, i)
-            ctx.lineTo(canvasW, i)
-            ctx.stroke()
-        }
-        ctx.restore()
-        ctx.draw()
-    }
-
-    drawLine() {
-        const { dividingLineType } = this.props
-        const ctx = wx.createCanvasContext('dividingline')
-        const { canvasW } = this.props.canvas
-        const C = canvasW / 4
-        ctx.save()
-        ctx.setStrokeStyle('#543c8d')
-        ctx.setLineWidth(1)
-
-        if (dividingLineType === 1) {
-            ctx.beginPath()
-            ctx.moveTo(C, 0)
-            ctx.lineTo(C, canvasW)
-            ctx.stroke()
-        }
-        else if (dividingLineType === 2) {
-            ctx.beginPath()
-            ctx.moveTo(0, C)
-            ctx.lineTo(canvasW, C)
-            ctx.stroke()
-        }
-        else if (dividingLineType === 3) {
-            ctx.beginPath()
-            ctx.moveTo(C, 0)
-            ctx.lineTo(C, canvasW)
-            ctx.stroke()
-
-            ctx.beginPath()
-            ctx.moveTo(0, C)
-            ctx.lineTo(canvasW, C)
-            ctx.stroke()
-        }
-        else {
-            ctx.clearRect(0, 0, canvasW, canvasW)
-        }
-
-        ctx.restore()
-        ctx.draw()
+        drawCanvas(
+            ctx, canvasW,
+            e.touches[0].x, e.touches[0].y, 
+            brushW, brushColor, 
+            dividingLineType, 
+            isChooseEraser, eraserW
+        )
     }
 
     render() {
-        this.drawLine()
-        const { showGrid } = this.props
-        const { isiPhoneX } = this.state
-        let bottomBtnStyle = isiPhoneX ? 'bottom: 30px;' : ''
-        if (this.props.canvas.canvasW > 1000) {
-            bottomBtnStyle = 'display: none;'
-        }
+        const { showGrid, canvas: { canvasW }, brushW, dividingLineType } = this.props
+        const { isIPhoneX } = this.state
+        
+        drawGrid(gridLayerId, canvasW, brushW)
+        drawLine(dividinglineLayerId, canvasW, dividingLineType)
+
         return (
             <View className='painting'>
                 <View className='canvas-container'>
                     <Canvas
-                        canvasId='background'
+                        canvasId={backgroundLayerId}
                         disableScroll
                     >
                     </Canvas>
                     <Canvas
-                        canvasId='grid'
+                        canvasId={gridLayerId}
                         disableScroll
                         style={showGrid ? '' : 'display: none;'}
                     />
                     <Canvas
-                        canvasId='dividingline'
+                        canvasId={dividinglineLayerId}
                         disableScroll
                     />
                     <Canvas
-                        canvasId='canvas'
+                        canvasId={drawLayerId}
                         disableScroll
-                        onTouchStart={this.onTouchStart}
-                        onTouchMove={this.onTouchMove}
+                        onTouchStart={this.handleTouchStart}
+                        onTouchMove={this.handleTouchMove}
                     />
                 </View>
 
-                <ToolBox isiPhoneX={isiPhoneX}/>
+                <ToolBox isIPhoneX={isIPhoneX}/>
 
-                <View className='bottom-btn' style={bottomBtnStyle}>
+                <View 
+                    className='bottom-btn' 
+                    style={isIPhoneX ? canvasW > 1000 ? 'display: none;' : 'bottom: 30px;' : '' }
+                >
                     <Button 
                         className='contact-button'
                         openType='contact'
@@ -282,7 +174,6 @@ class Index extends Component {
                     >
                         推荐好友
                     </Button>
-                    <Text className='iconfont icon-shuxian-copy-copy' style='font-size: 20px;'></Text>
                 </View>
             </View>
         )

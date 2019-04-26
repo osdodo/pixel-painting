@@ -8,7 +8,10 @@ import {
 } from '../constants/canvasSettings'
 
 const INITIAL_STATE = {
-    canvas: {},
+    canvas: {
+        ctx: {}, 
+        canvasW: 750
+    },
     showGrid: false,
     dividingLineType: 0, //无: 0, 垂直: 1, 横向: 2, horizontal && vertical: 3
     isChooseEraser: false,

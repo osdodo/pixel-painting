@@ -2,7 +2,7 @@ import { Component } from '@tarojs/taro'
 import { View, Text, Slider } from '@tarojs/components'
 
 import { connect } from '@tarojs/redux'
-import { changeEraserWidth } from '../../../actions/canvasSettings'
+import { changeEraserWidth } from '../../actions/canvasSettings'
 
 import './EraserSetting.css'
 
@@ -17,19 +17,18 @@ import './EraserSetting.css'
         }
     })
 )
-
 class EraserSetting extends Component {
 
     render() {
         const {
             isChooseEraser, eraserW, 
             onChangeEraserWidth,
-            isiPhoneX
+            isIPhoneX
         } = this.props
         let eraserSettingStyle = isChooseEraser
             ? 'transition: transform 800ms ease 0ms; transform: translateX(0px); transform-origin: 50% 50% 0px;'
             : 'transition: transform 800ms ease 0ms; transform: translateX(1100px); transform-origin: 50% 50% 0px;'
-        if (isiPhoneX) {
+        if (isIPhoneX) {
             eraserSettingStyle = eraserSettingStyle + 'bottom: 20px;'
         }
         return (
