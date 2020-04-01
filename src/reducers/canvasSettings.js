@@ -1,18 +1,18 @@
-import { 
+import {
     INIT_CANVAS,
-    SHOW_GRID_SWITCH, 
-    CHANGE_DIVIDING_LINE, 
-    ERASER_SWITCH, 
-    CHANGE_ERASER_WIDTH, 
+    SHOW_GRID_SWITCH,
+    CHANGE_DIVIDING_LINE,
+    ERASER_SWITCH,
+    CHANGE_ERASER_WIDTH,
     COLOR_PICKING_TOOL_SWITCH
 } from '../constants/canvasSettings'
 
 const INITIAL_STATE = {
     canvas: {
-        ctx: {}, 
+        ctx: {},
         canvasW: 750
     },
-    showGrid: false,
+    showGrid: true,
     dividingLineType: 0, //无: 0, 垂直: 1, 横向: 2, horizontal && vertical: 3
     isChooseEraser: false,
     eraserW: 10,

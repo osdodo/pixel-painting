@@ -7,6 +7,7 @@ import Index from './pages/index'
 import configStore from './store'
 
 import './app.css'
+import './iconfont.css'
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -20,7 +21,8 @@ class App extends Component {
 
     config = {
         pages: [
-            'pages/index/index'
+            'pages/index/index',
+            'pages/personal/personal'
         ],
         window: {
             backgroundTextStyle: 'light',
@@ -28,7 +30,24 @@ class App extends Component {
             navigationBarTitleText: '像素绘画助手',
             navigationBarTextStyle: 'black'
         },
-        navigateToMiniProgramAppIdList: ['wx18a2ac992306a5a4']
+        tabBar: {
+            selectedColor: '#E74C3C',
+            borderStyle: 'white',
+            list: [
+                {
+                    pagePath: 'pages/index/index',
+                    text: '像素涂画',
+                    iconPath: 'images/home.png',
+                    selectedIconPath: 'images/home_d.png'
+                },
+                {
+                    pagePath: 'pages/personal/personal',
+                    text: '我的',
+                    iconPath: 'images/my.png',
+                    selectedIconPath: 'images/my_d.png'
+                }
+            ]
+        }
     }
 
     componentDidMount() { }

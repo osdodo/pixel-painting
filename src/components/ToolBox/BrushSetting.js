@@ -2,14 +2,13 @@ import { Component } from '@tarojs/taro'
 import { View, Text, Slider } from '@tarojs/components'
 
 import { connect } from '@tarojs/redux'
-import { 
-    showSettingSwitch, 
-    changeBrushWidth, 
-    changeBrushColor 
+import {
+    showSettingSwitch,
+    changeBrushWidth,
+    changeBrushColor
 } from '../../actions/brushSettings'
 
-import './BrushSetting.css'
-import '../../iconfont.css'
+import './BrushSetting.less'
 
 @connect(
     ({ brushSettings }) => brushSettings,
@@ -28,23 +27,20 @@ import '../../iconfont.css'
     })
 )
 class BrushSetting extends Component {
- 
+
     render() {
         const {
             isShowPenSetting, handleShowSettingSwitch,
             brushW, handleChangeBrushWidth,
             brushColor, handleChangeBrushColor,
-            isIPhoneX
         } = this.props
 
         const { red, green, blue, alpha } = brushColor
 
-        let penSettingStyle = isShowPenSetting
+        const penSettingStyle = isShowPenSetting
             ? 'transition: transform 800ms ease 0ms; transform: translateX(0px); transform-origin: 50% 50% 0px;'
             : 'transition: transform 800ms ease 0ms; transform: translateX(-1100px); transform-origin: 50% 50% 0px;'
-        if (isIPhoneX) {
-            penSettingStyle = penSettingStyle + 'bottom: 20px;'
-        }
+            
         return (
             <View
                 className='pen-setting'
@@ -130,7 +126,7 @@ class BrushSetting extends Component {
                             onChanging={handleChangeBrushColor}
                         />
                     </View>
-                    <Text 
+                    <Text
                         className='iconfont icon-shouqi4-copy'
                         style='font-size: 20px;'
                         onClick={handleShowSettingSwitch}

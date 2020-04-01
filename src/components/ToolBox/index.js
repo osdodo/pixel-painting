@@ -1,15 +1,15 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Picker } from '@tarojs/components'
-import BrushSetting from '../BrushSetting/BrushSetting'
-import EraserSetting from '../EraserSetting/EraserSetting'
-import Bitmap2Pixel from '../Bitmap2Pixel/Bitmap2Pixel'
+import BrushSetting from './BrushSetting'
+import EraserSetting from './EraserSetting'
+import Bitmap2Pixel from './Bitmap2Pixel'
 
 import { connect } from '@tarojs/redux'
 import { showSettingSwitch } from '../../actions/brushSettings'
-import { 
-    showGridSwitch, 
-    changeDividingLineType, 
-    eraserSwitch, 
+import {
+    showGridSwitch,
+    changeDividingLineType,
+    eraserSwitch,
     colorPickingToolSwitch
 } from '../../actions/canvasSettings'
 import { setImageToPixelInfo, showBitmapToPixelSwitch } from '../../actions/bitmapToPixelSetting'
@@ -17,7 +17,7 @@ import { setImageToPixelInfo, showBitmapToPixelSwitch } from '../../actions/bitm
 import { save, clearCanvas, upload } from '../../utils/wx-tool'
 import { drawLayerId } from '../../canvas-config'
 
-import './ToolBox.css'
+import './index.less'
 import '../../iconfont.css'
 
 @connect(
@@ -54,43 +54,43 @@ class ToolBox extends Component {
     dividingLineTypeList = ['无', '左右对称', '上下对称', '上下左右对称']
 
     handleShowSettingSwitch = () => {
-        const { 
+        const {
             showGrid, handleShowGridSwitch,
-            isChooseEraser, eraserSwitch, 
-            isChooseColorPickingTool, colorPickingToolSwitch, 
-            showSettingSwitch 
+            isChooseEraser, eraserSwitch,
+            isChooseColorPickingTool, colorPickingToolSwitch,
+            showSettingSwitch
         } = this.props
-        
-        if (!showGrid)                { handleShowGridSwitch() }
-        if (isChooseEraser)           { eraserSwitch() }
+
+        if (!showGrid) { handleShowGridSwitch() }
+        if (isChooseEraser) { eraserSwitch() }
         if (isChooseColorPickingTool) { colorPickingToolSwitch() }
 
         showSettingSwitch()
     }
 
     handleEraserSwitch = () => {
-        const { 
-            isShowPenSetting, showSettingSwitch, 
-            isChooseColorPickingTool, colorPickingToolSwitch, 
-            eraserSwitch 
+        const {
+            isShowPenSetting, showSettingSwitch,
+            isChooseColorPickingTool, colorPickingToolSwitch,
+            eraserSwitch
         } = this.props
 
-        if (isShowPenSetting)         { showSettingSwitch() }
+        if (isShowPenSetting) { showSettingSwitch() }
         if (isChooseColorPickingTool) { colorPickingToolSwitch() }
 
         eraserSwitch()
     }
 
     handleColorPickingToolSwitch = () => {
-        const { 
-            isShowPenSetting, showSettingSwitch, 
-            isChooseEraser, eraserSwitch, 
-            colorPickingToolSwitch 
+        const {
+            isShowPenSetting, showSettingSwitch,
+            isChooseEraser, eraserSwitch,
+            colorPickingToolSwitch
         } = this.props
 
         if (isShowPenSetting) { showSettingSwitch() }
-        if (isChooseEraser)   { eraserSwitch() }
-        
+        if (isChooseEraser) { eraserSwitch() }
+
         colorPickingToolSwitch()
     }
 
@@ -103,48 +103,49 @@ class ToolBox extends Component {
         save(drawLayerId)
     }
 
-    handleUpload = () =>{
+    handleUpload = () => {
+        const {
+            showGrid, handleShowGridSwitch
+        } = this.props
+        if (showGrid) {
+            handleShowGridSwitch()
+        }
         const { ctx, canvasW } = this.props.canvas
         upload(ctx, canvasW).then(imageToPixelInfo => {
             this.props.setImageToPixelInfo(imageToPixelInfo)
             this.props.showBitmapToPixelSwitch()
         })
     }
-    
+
     render() {
         const {
-            canvas: { canvasW },
             brushColor: { red, green, blue, alpha },
             showGrid, handleShowGridSwitch,
             dividingLineType, handleChangeDividingLineType,
-            isChooseEraser, isChooseColorPickingTool,
-            isIPhoneX
+            isChooseEraser, isChooseColorPickingTool
         } = this.props
-
-        const childH = `height: ${(canvasW > 1000 ? 900 - 30 : canvasW - 30) / 10}px;` 
 
         return (
             <View>
-                <View className='parent'>
-                    <View 
-                        className='child' 
-                        style={childH}
+                <View className='tool'>
+                    <View
+                        className='item'
                         onClick={this.handleShowSettingSwitch}
                     >
                         <Text
                             className='iconfont icon-pen'
                             style={`color: rgba(${red}, ${green}, ${blue}, ${alpha});font-size: 30px;`}
                         />
-                        <Text className='child__title'>笔</Text>
+                        <Text className='title'>笔</Text>
                     </View>
-                    <View className='child'   style={childH} onClick={handleShowGridSwitch}>
+                    <View className='item' onClick={handleShowGridSwitch}>
                         <Text
                             className='iconfont icon-wangge'
                             style={showGrid ? 'color: #543c8d;font-size: 30px;' : 'font-size: 30px;'}
                         />
-                        <Text className='child__title'>网格</Text>
+                        <Text className='title'>网格</Text>
                     </View>
-                    <View className='child' style={childH}>
+                    <View className='item'>
                         <Picker range={this.dividingLineTypeList} onChange={handleChangeDividingLineType}>
                             {
                                 dividingLineType === 0 &&
@@ -175,47 +176,47 @@ class ToolBox extends Component {
                                 />
                             }
                         </Picker>
-                        <Text className='child__title'>对称轴</Text>
+                        <Text className='title'>对称轴</Text>
                     </View>
-                    <View className='child'  style={childH} onClick={this.handleEraserSwitch}>
+                    <View className='item' onClick={this.handleEraserSwitch}>
                         <Text
                             className='iconfont icon-xiangpi'
                             style={isChooseEraser ? 'color: #543c8d;font-size: 30px;' : 'font-size: 30px;'}
                         />
-                        <Text className='child__title'>橡皮擦</Text>
+                        <Text className='title'>橡皮擦</Text>
                     </View>
-                    <View className='child'  style={childH} onClick={this.handleColorPickingToolSwitch}>
+                    <View className='item' onClick={this.handleColorPickingToolSwitch}>
                         <Text
-                            className='iconfont icon-quse' 
+                            className='iconfont icon-quse'
                             style={isChooseColorPickingTool ? 'color: #543c8d;font-size: 30px;' : 'font-size: 30px;'}
                         >
                         </Text>
-                        <Text className='child__title'>取色器</Text>
+                        <Text className='title'>取色器</Text>
                     </View>
-                    <View className='child'  style={childH} onClick={this.handleClearCanvas}>
+                    <View className='item' onClick={this.handleClearCanvas}>
                         <Text
                             className='iconfont icon-shanchu'
                             style='font-size: 30px;'
                         />
-                        <Text className='child__title'>清空画布</Text>
+                        <Text className='title'>清空画布</Text>
                     </View>
-                    <View className='child'  style={childH} onClick={this.handleSave}>
-                        <Text
-                            className='iconfont icon-baocun'
-                            style='font-size: 30px;'
-                        />
-                        <Text className='child__title'>保存</Text>
-                    </View>
-                    <View className='child'  style={childH}  onClick={this.handleUpload}>
+                    <View className='item' onClick={this.handleUpload}>
                         <Text
                             className='iconfont icon-zhuanhuan'
                             style='font-size: 30px;'
                         />
-                        <Text className='child__title'>位图转像素</Text>
+                        <Text className='title'>图片像素化</Text>
+                    </View>
+                    <View className='item' onClick={this.handleSave}>
+                        <Text
+                            className='iconfont icon-baocun'
+                            style='font-size: 30px;'
+                        />
+                        <Text className='title'>保存</Text>
                     </View>
                 </View>
-                <BrushSetting isIPhoneX={isIPhoneX}/>
-                <EraserSetting isIPhoneX={isIPhoneX}/>
+                <BrushSetting />
+                <EraserSetting />
                 <Bitmap2Pixel />
             </View>
         )

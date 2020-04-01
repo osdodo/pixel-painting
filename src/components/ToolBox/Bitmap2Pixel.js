@@ -1,10 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-
 import { connect } from '@tarojs/redux'
 import { showBitmapToPixelSwitch } from '../../actions/bitmapToPixelSetting'
-
-import { getImageData, putImageData, thresholdConvert } from '../../utils/wx-tool';
+import { getImageData, putImageData, thresholdConvert } from '../../utils/wx-tool'
 
 @connect(
     ({ bitmapToPixelSetting, canvasSetting: { canvas } }) => ({
@@ -27,7 +25,7 @@ class Bitmap2Pixel extends Component {
                 })
                 .catch(err => {
                     Taro.showToast({
-                        title: '😭转换失败',
+                        title: '转换失败',
                         icon: 'none',
                         duration: 2000
                     })
@@ -65,9 +63,7 @@ class Bitmap2Pixel extends Component {
     }
 
     render() {
-        return (
-            <View></View>
-        )
+        return <View></View>
     }
 }
 
