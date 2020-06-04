@@ -1,0 +1,26 @@
+<view class="color-picker-mask" wx:if="{{show}}">
+  <view id="wrapper" class="color-picker-container">
+    <view class="wrapper">
+        <view class="pick-area">
+            <view class="color-picker-map" catchtouchmove="_chooseColor" bindtap="_chooseColor">
+                <view class="color-picker-map-item solid" style="background:rgb({{hueData.colorStopRed}},{{hueData.colorStopGreen}},{{hueData.colorStopBlue}})"></view>
+                <view class="color-picker-map-item white" style="background:linear-gradient(to right, rgba(255,255,255,1), rgba({{hueData.colorStopRed}},{{hueData.colorStopGreen}},{{hueData.colorStopBlue}},0));"></view>
+                <view class="color-picker-map-item black" style="background:linear-gradient(to top, rgba(0,0,0,1), rgba({{hueData.colorStopRed}},{{hueData.colorStopGreen}},{{hueData.colorStopBlue}},0));">
+                </view>
+                <view class="picker" style="left:{{pickerData.x}}rpx;top:{{pickerData.y}}rpx;"></view>
+            </view>
+            <view class="color-picker-bar" catchtouchmove="_changeBar" bindtap="_changeBar">
+                <view class="picker" style="top:{{barY}}rpx;"></view>
+            </view>
+        </view>
+        <view class="data-area">
+            <view class="rgb-input-wrapper">R: <input class="rgb-input" type="number" value="{{input.red}}" data-type="red" bindinput="handleInputRgb" bindblur="handleBlurRgb"/> G: <input class="rgb-input" type="number" value="{{input.green}}" data-type="green" bindinput="handleInputRgb" bindblur="handleBlurRgb"/> B: <input class="rgb-input"  type="number" value="{{input.blue}}" data-type="blue" bindinput="handleInputRgb" bindblur="handleBlurRgb"/></view>
+            <view class="hex-input-wrapper">HEX: <input class="hex-input" type="text" value="{{input.hex}}" bindinput="handleInputHex" bindblur="handleBlurHex"/></view>
+        </view>
+    </view>
+    <view class="color-picker-btns">
+      <view class="btn-cancel" catchtap="handleCancel">取消</view>
+      <view class="btn-confirm" catchtap="handleConfirm">确定</view>
+    </view>
+</view>
+</view>

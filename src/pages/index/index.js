@@ -1,10 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Canvas } from '@tarojs/components'
 import ToolBox from '../../components/ToolBox'
-
+import CustomNavigation from '../../components/CustomNavigation'
 import { connect } from '@tarojs/redux'
 import { changeBrushColor, showSettingSwitch } from '../../actions/brushSettings'
-import { initCanvas } from '../../actions/canvasSettings'
+import { initCanvas, colorPickingToolSwitch } from '../../actions/canvasSettings'
 
 import { drawCanvas, getImageData, drawGrid, drawLine } from '../../utils/wx-tool'
 import { backgroundLayerId, gridLayerId, dividinglineLayerId, drawLayerId } from '../../canvas-config'
@@ -26,14 +26,22 @@ import './index.less'
         showSettingSwitch() {
             dispatch(showSettingSwitch())
         },
+        colorPickingToolSwitch() {
+            dispatch(colorPickingToolSwitch())
+        },
     })
 )
 class Index extends Component {
 
     config = {
-        navigationBarTitleText: '像素表情生成',
+        navigationBarTitleText: '像素涂画',
         enablePullDownRefresh: false,
         disableScroll: true,
+        navigationStyle: 'custom'
+    }
+
+    state = {
+        showCanvas: true
     }
 
     componentWillMount() {
@@ -60,11 +68,18 @@ class Index extends Component {
         const {
             isShowPenSetting, showSettingSwitch,
         } = this.props
+
         if (isShowPenSetting) {
             showSettingSwitch()
         }
+
         if (this.props.isChooseColorPickingTool) {
-            getImageData(drawLayerId, e.touches[0].x, e.touches[0].y, 1, 1).then(data => {
+            getImageData({
+                canvasId: drawLayerId,
+                dx: e.touches[0].x,
+                dy: e.touches[0].y,
+                dWidth: 1, dHeight: 1
+            }).then(data => {
                 const r = data[0]
                 const g = data[1]
                 const b = data[2]
@@ -78,6 +93,12 @@ class Index extends Component {
                             blue: b,
                             alpha: a
                         })
+
+                        // 切换成笔的状态
+                        const { isChooseColorPickingTool, colorPickingToolSwitch } = this.props
+                        if (isChooseColorPickingTool) {
+                            colorPickingToolSwitch()
+                        }
                     }
                 }
             })
@@ -91,13 +112,14 @@ class Index extends Component {
                 isChooseEraser,
                 eraserW
             } = this.props
-            drawCanvas(
+            drawCanvas({
                 ctx, canvasW,
-                e.touches[0].x, e.touches[0].y,
+                touchX: e.touches[0].x,
+                touchY: e.touches[0].y,
                 brushW, brushColor,
                 dividingLineType,
                 isChooseEraser, eraserW
-            )
+            })
         }
     }
 
@@ -111,24 +133,45 @@ class Index extends Component {
             isChooseEraser,
             eraserW
         } = this.props
-        drawCanvas(
+        drawCanvas({
             ctx, canvasW,
-            e.touches[0].x, e.touches[0].y,
+            touchX: e.touches[0].x,
+            touchY: e.touches[0].y,
             brushW, brushColor,
             dividingLineType,
             isChooseEraser, eraserW
-        )
+        })
+    }
+
+    handleSwitchAction = ({ isOpenedNavActionSheet }) => {
+        this.setState({
+            showCanvas: !isOpenedNavActionSheet
+        })
     }
 
     render() {
-        const { showGrid, canvas: { canvasW }, brushW, dividingLineType } = this.props
-
-        drawGrid(gridLayerId, canvasW, brushW)
-        drawLine(dividinglineLayerId, canvasW, dividingLineType)
+        const { isShowPenSetting, showGrid, brushW, canvas: { canvasW }, dividingLineType } = this.props
+        const { showCanvas } = this.state
+        drawGrid({
+            canvasId: gridLayerId,
+            canvasW, brushW
+        })
+        drawLine({
+            canvasId: dividinglineLayerId,
+            canvasW, dividingLineType
+        })
 
         return (
             <View className='index'>
-                <View className='container' style={`height: ${canvasW}px`}>
+                <CustomNavigation
+                    title='像素涂画'
+                    onSwitch={this.handleSwitchAction}
+                />
+                <View
+                    className='container'
+                    style={`height: ${canvasW}px`}
+                    style={isShowPenSetting || !showCanvas ? 'display: none;' : ''}
+                >
                     <Canvas
                         canvasId={backgroundLayerId}
                         disableScroll
@@ -150,6 +193,12 @@ class Index extends Component {
                         onTouchMove={this.handleTouchMove}
                     />
                 </View>
+                <View
+                    className='container'
+                    style={!showCanvas ? '' : 'display: none;'}
+                >
+                   <Text className='tips'>暂时收起画布</Text>
+                </View>
                 <ToolBox />
             </View>
         )
@@ -158,7 +207,7 @@ class Index extends Component {
     onShareAppMessage() {
         return {
             path: '/pages/index/index',
-            title: '像素表情生成',
+            title: '像素涂画',
             imageUrl: 'cloud://pixel-painting-bkykm.7069-pixel-painting-bkykm-1301723573/share.jpeg',
             success: res => { },
             fail: err => { }

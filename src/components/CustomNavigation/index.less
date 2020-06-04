@@ -1,0 +1,88 @@
+.navigation {
+  position        : fixed;
+  left            : 0;
+  top             : 0;
+  z-index         : 9999;
+  width           : 100vw;
+  background-color: white;
+
+  .toolbar {
+    position       : relative;
+    width          : 100%;
+    height         : 84px;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+
+    .icon {
+      position: absolute;
+      left    : 20px;
+      top     : 22px;
+    }
+
+    .title {
+      font-size  : 30px;
+      color      : #000;
+    }
+  }
+}
+
+.action-sheet {
+  position        : fixed;
+  top             : 0;
+  right           : 0;
+  bottom          : 0;
+  left            : 0;
+  background-color: rgba(0, 0, 0, .5);
+  z-index         : 99999;
+
+  .rectangle {
+    position      : absolute;
+    left          : 24px;
+    top           : 20px;
+    width         : 320px;
+    display       : flex;
+    flex-direction: column;
+    border-radius : 8px;
+    box-sizing    : border-box;
+    padding       : 20px;
+    background    : white;
+
+    .triangle-up {
+      position     : absolute;
+      top          : -8px;
+      left         : 10px;
+      width        : 0;
+      height       : 0;
+      border-left  : 10px solid transparent;
+      border-right : 10px solid transparent;
+      border-bottom: 15px solid white;
+    }
+
+    .button-hover {
+        background-color: transparent;
+    }
+  }
+
+  .action-item {
+    width          : 100%;
+    display        : flex;
+    align-items    : center;
+    justify-content: space-between;
+
+    &:not(:last-child) {
+      margin-bottom: 40px;
+    }
+
+    .left {
+        display: flex;
+        align-items: center;
+    }
+
+    .text {
+      font-size: 30px;
+      color    : #7c7b7b;
+      margin-left: 10px;
+    }
+  }
+}

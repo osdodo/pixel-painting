@@ -1,0 +1,72 @@
+.about {
+    width         : 100%;
+    height        : 100%;
+    display       : flex;
+    flex-direction: column;
+    align-items   : center;
+}
+
+.container {
+    width          : 400px;
+    height         : 400px;
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    margin-top     : 20px;
+}
+
+text {
+    font-family: 'Josefin Sans', sans-serif;
+    color      : currentColor;
+    font-size  : 20px;
+    position   : relative;
+    font-style : normal;
+    width      : 35px;
+    text-align : center;
+}
+
+text.planet {
+    -webkit-animation: planet-rotate 4s linear infinite;
+    animation        : planet-rotate 4s linear infinite;
+    position         : relative;
+}
+
+text.planet::before {
+    content      : "";
+    position     : absolute;
+    top          : -.5px;
+    left         : 3.5px;
+    z-index      : -1;
+    width        : 13px;
+    height       : 13px;
+    border-radius: 50%;
+    background   : black;
+}
+
+text.planet.left {
+    -webkit-transform-origin: 40px 5px;
+    transform-origin        : 40px 5px;
+}
+
+text.planet.right {
+    -webkit-transform-origin: -20px 5px;
+    transform-origin        : -20px 5px;
+}
+
+@-webkit-keyframes planet-rotate {
+    to {
+        -webkit-transform: rotate(1turn);
+    }
+}
+
+@keyframes planet-rotate {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+.info {
+    margin-top: 80px;
+    font-size : 25px;
+    color     : #7c7b7b;
+}

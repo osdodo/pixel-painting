@@ -1,5 +1,5 @@
 const drawRect = (ctx, x, y, w, h, color) => {
-    ctx.setFillStyle(color)
+    ctx.fillStyle = color
     ctx.fillRect(x, y, w, h)
     ctx.draw(true)
 }
@@ -28,7 +28,7 @@ const canvasToTempFilePath = (canvasId) => {
 const saveImageToPhotosAlbum = (filePath) => {
     return new Promise((resolve, reject) => {
         wx.saveImageToPhotosAlbum({
-            filePath: filePath,
+            filePath,
             success: () => {
                 resolve()
             },
@@ -39,7 +39,9 @@ const saveImageToPhotosAlbum = (filePath) => {
     })
 }
 
-export const getImageData = (canvasId, dx, dy, dWidth, dHeight) => {
+export const getImageData = ({
+    canvasId, dx, dy, dWidth, dHeight
+ }) => {
     return new Promise((resolve, reject) => {
         wx.canvasGetImageData({
             canvasId: canvasId,
@@ -57,7 +59,9 @@ export const getImageData = (canvasId, dx, dy, dWidth, dHeight) => {
     })
 }
 
-export const putImageData = (canvasId, dx, dy, dWidth, dHeight, imageData) => {
+export const putImageData = ({
+    canvasId, dx, dy, dWidth, dHeight, imageData
+}) => {
     return new Promise((resolve, reject) => {
         wx.canvasPutImageData({
             canvasId: canvasId,
@@ -76,25 +80,25 @@ export const putImageData = (canvasId, dx, dy, dWidth, dHeight, imageData) => {
     })
 }
 
-export const thresholdConvert = (imageData, threshold) => {
-    for (let i = 0, len = imageData.length; i < len; i += 4) {
-        let red = imageData[i]
-        let green = imageData[i + 1]
-        let blue = imageData[i + 2]
-        let alpha = imageData[i + 3]
+export const thresholdConvert = (pixels, threshold) => {
+    for (let i = 0, len = pixels.length; i < len; i += 4) {
+        let red = pixels[i]
+        let green = pixels[i + 1]
+        let blue = pixels[i + 2]
+        let alpha = pixels[i + 3]
         let gray = 0.299 * red + 0.587 * green + 0.114 * blue
         let color = gray >= threshold ? 255 : 0
 
-        imageData[i] = color
-        imageData[i + 1] = color
-        imageData[i + 2] = color
-        imageData[i + 3] = alpha >= threshold ? 255 : 0
+        pixels[i] = color
+        pixels[i + 1] = color
+        pixels[i + 2] = color
+        pixels[i + 3] = alpha >= threshold ? 255 : 0
     }
 }
 
-export const drawGrid = (canvasId, canvasW, brushW) => {
+export const drawGrid = ({ canvasId, canvasW, brushW }) => {
     const ctx = wx.createCanvasContext(canvasId)
-    ctx.save()
+
     ctx.setStrokeStyle('lightgray')
     ctx.setLineWidth(0.5)
     for (let i = brushW + 0.5; i < canvasW; i = i + brushW) {
@@ -109,14 +113,14 @@ export const drawGrid = (canvasId, canvasW, brushW) => {
         ctx.lineTo(canvasW, i)
         ctx.stroke()
     }
-    ctx.restore()
+
     ctx.draw()
 }
 
-export const drawLine = (canvasId, canvasW, dividingLineType) => {
+export const drawLine = ({ canvasId, canvasW, dividingLineType }) => {
     const ctx = wx.createCanvasContext(canvasId)
     const C = canvasW / 2
-    ctx.save()
+
     ctx.setStrokeStyle('#543c8d')
     ctx.setLineWidth(1)
 
@@ -133,10 +137,14 @@ export const drawLine = (canvasId, canvasW, dividingLineType) => {
         ctx.stroke()
     }
     else if (dividingLineType === 3) {
+        ctx.save()
+
         ctx.beginPath()
         ctx.moveTo(C, 0)
         ctx.lineTo(C, canvasW)
         ctx.stroke()
+
+        ctx.restore()
 
         ctx.beginPath()
         ctx.moveTo(0, C)
@@ -147,13 +155,14 @@ export const drawLine = (canvasId, canvasW, dividingLineType) => {
         ctx.clearRect(0, 0, canvasW, canvasW)
     }
 
-    ctx.restore()
     ctx.draw()
 }
 
 
-export const drawCanvas =
-    (ctx, canvasW, touchX, touchY, brushW, brushColor, dividingLineType, isChooseEraser, eraserW) => {
+export const drawCanvas = ({
+        ctx, canvasW, touchX, touchY, brushW, brushColor,
+        dividingLineType, isChooseEraser, eraserW
+}) => {
         const { red, green, blue, alpha } = brushColor
         const x = Number((touchX / brushW).toFixed(0)) * brushW
         const y = Number((touchY / brushW).toFixed(0)) * brushW
@@ -239,7 +248,6 @@ export const save = (canvasId) => {
                     duration: 2000
                 })
             }
-
             wx.hideLoading()
         })
     }).catch(() => {
@@ -252,8 +260,7 @@ export const clearCanvas = (ctx, canvasW) => {
         content: '确认清空画布吗？',
         success: (tip) => {
             if (tip.confirm) {
-                ctx.clearRect(0, 0, canvasW, canvasW)
-                ctx.draw()
+                clearRect(ctx, 0, 0, canvasW, canvasW)
             }
         }
     })
