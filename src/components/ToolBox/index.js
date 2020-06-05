@@ -14,7 +14,6 @@ import {
     colorPickingToolSwitch,
     changeEraserWidth
 } from '../../actions/canvasSettings'
-
 import { save, clearCanvas } from '../../utils/wx-tool'
 import { drawLayerId } from '../../canvas-config'
 
@@ -60,7 +59,7 @@ class ToolBox extends Component {
     config = {
         // 定义需要引入的第三方组件
         usingComponents: {
-            'color-picker': '../../components/color-picker/color-picker' // 书写第三方组件的相对路径
+            'color-picker': '../../components/color-picker/color-picker'
         }
     }
 
@@ -260,7 +259,7 @@ class ToolBox extends Component {
                 </View>
                 <color-picker
                     show={isShowPenSetting}
-                    color={'#000'}
+                    color='#000'
                     onClose={this.onHideColorPicker}
                     onChange={this.onColorSelect}
                 />

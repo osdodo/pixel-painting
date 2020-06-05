@@ -5,9 +5,11 @@ import CustomNavigation from '../../components/CustomNavigation'
 import { connect } from '@tarojs/redux'
 import { changeBrushColor, showSettingSwitch } from '../../actions/brushSettings'
 import { initCanvas, colorPickingToolSwitch } from '../../actions/canvasSettings'
-
 import { drawCanvas, getImageData, drawGrid, drawLine } from '../../utils/wx-tool'
-import { backgroundLayerId, gridLayerId, dividinglineLayerId, drawLayerId } from '../../canvas-config'
+import {
+    backgroundLayerId, gridLayerId,
+    dividinglineLayerId, drawLayerId
+} from '../../canvas-config'
 
 import './index.less'
 
@@ -47,16 +49,13 @@ class Index extends Component {
     componentWillMount() {
         const { initCanvas } = this.props
         try {
-            const systemInfo = Taro.getSystemInfoSync()
+            const { screenWidth } = Taro.getSystemInfoSync()
             initCanvas({
                 ctx: Taro.createCanvasContext(drawLayerId),
-                canvasW: systemInfo.screenWidth
+                canvasW: screenWidth
             })
         } catch (e) {
-            initCanvas({
-                ctx: Taro.createCanvasContext(drawLayerId),
-                canvasW: 750
-            })
+
         }
 
         wx.cloud.init({
@@ -124,7 +123,14 @@ class Index extends Component {
     }
 
     handleTouchMove = e => {
-        if ( this.props.isChooseColorPickingTool) return
+        if (this.props.isChooseColorPickingTool) {
+            Taro.showToast({
+                title: '正在取色器状态, 可点击“取色器”关闭它',
+                icon: 'none',
+                duration: 1000
+            })
+            return
+        }
         const {
             canvas: { ctx, canvasW },
             brushW,
@@ -169,7 +175,6 @@ class Index extends Component {
                 />
                 <View
                     className='container'
-                    style={`height: ${canvasW}px`}
                     style={isShowPenSetting || !showCanvas ? 'display: none;' : ''}
                 >
                     <Canvas
