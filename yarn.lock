@@ -201,27 +201,6 @@
     webpack-format-messages "^2.0.5"
     yauzl "2.10.0"
 
-"@tarojs/mobx-common@2.0.4":
-  version "2.0.4"
-  resolved "https://registry.npm.taobao.org/@tarojs/mobx-common/download/@tarojs/mobx-common-2.0.4.tgz#508eb5a42a936ef4a25e1aba2a788ed48b2df61e"
-  integrity sha1-UI61pCqTbvSiXhq6KniO1Ist9h4=
-
-"@tarojs/mobx-h5@2.0.4":
-  version "2.0.4"
-  resolved "https://registry.npm.taobao.org/@tarojs/mobx-h5/download/@tarojs/mobx-h5-2.0.4.tgz#90d5ae7e1a9da2f03b323d275c5217b3710a9122"
-  integrity sha1-kNWufhqdovA7Mj0nXFIXs3EKkSI=
-  dependencies:
-    "@tarojs/mobx-common" "2.0.4"
-    "@tarojs/taro-h5" "2.0.4"
-
-"@tarojs/mobx@2.0.4":
-  version "2.0.4"
-  resolved "https://registry.npm.taobao.org/@tarojs/mobx/download/@tarojs/mobx-2.0.4.tgz#6cf6e95e43bff74b32d736ac3723bd2953fc18b3"
-  integrity sha1-bPbpXkO/90sy1zasNyO9KVP8GLM=
-  dependencies:
-    "@tarojs/mobx-common" "2.0.4"
-    "@tarojs/taro" "2.0.4"
-
 "@tarojs/plugin-sass@2.0.4":
   version "2.0.4"
   resolved "https://registry.npm.taobao.org/@tarojs/plugin-sass/download/@tarojs/plugin-sass-2.0.4.tgz#ae9a69f141147139ee9616d20bdb2bd2fbbaec5e"
@@ -6537,11 +6516,6 @@ mobile-detect@^1.4.2:
   resolved "https://registry.yarnpkg.com/mobile-detect/-/mobile-detect-1.4.4.tgz#686c74e92d3cc06b09a9b3594b7b981494b137f6"
   integrity sha512-vTgEjKjS89C5yHL5qWPpT6BzKuOVqABp+A3Szpbx34pIy3sngxlGaFpgHhfj6fKze1w0QKeOSDbU7SKu7wDvRQ==
 
-mobx@4.8.0:
-  version "4.8.0"
-  resolved "https://registry.npm.taobao.org/mobx/download/mobx-4.8.0.tgz#6059feb9e0d3440acca5ae192daad63198b1180f"
-  integrity sha1-YFn+ueDTRArMpa4ZLarWMZixGA8=
-
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -7343,9 +7317,9 @@ path-key@^2.0.0, path-key@^2.0.1:
   integrity sha1-QRyttXTFoUDTpLGRDUDYDMn0C0A=
 
 path-parse@^1.0.5, path-parse@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
-  integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+  integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-to-regexp@0.1.7:
   version "0.1.7"
