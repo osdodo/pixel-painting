@@ -201,27 +201,6 @@
     webpack-format-messages "^2.0.5"
     yauzl "2.10.0"
 
-"@tarojs/mobx-common@2.0.4":
-  version "2.0.4"
-  resolved "https://registry.npm.taobao.org/@tarojs/mobx-common/download/@tarojs/mobx-common-2.0.4.tgz#508eb5a42a936ef4a25e1aba2a788ed48b2df61e"
-  integrity sha1-UI61pCqTbvSiXhq6KniO1Ist9h4=
-
-"@tarojs/mobx-h5@2.0.4":
-  version "2.0.4"
-  resolved "https://registry.npm.taobao.org/@tarojs/mobx-h5/download/@tarojs/mobx-h5-2.0.4.tgz#90d5ae7e1a9da2f03b323d275c5217b3710a9122"
-  integrity sha1-kNWufhqdovA7Mj0nXFIXs3EKkSI=
-  dependencies:
-    "@tarojs/mobx-common" "2.0.4"
-    "@tarojs/taro-h5" "2.0.4"
-
-"@tarojs/mobx@2.0.4":
-  version "2.0.4"
-  resolved "https://registry.npm.taobao.org/@tarojs/mobx/download/@tarojs/mobx-2.0.4.tgz#6cf6e95e43bff74b32d736ac3723bd2953fc18b3"
-  integrity sha1-bPbpXkO/90sy1zasNyO9KVP8GLM=
-  dependencies:
-    "@tarojs/mobx-common" "2.0.4"
-    "@tarojs/taro" "2.0.4"
-
 "@tarojs/plugin-sass@2.0.4":
   version "2.0.4"
   resolved "https://registry.npm.taobao.org/@tarojs/plugin-sass/download/@tarojs/plugin-sass-2.0.4.tgz#ae9a69f141147139ee9616d20bdb2bd2fbbaec5e"
@@ -6537,11 +6516,6 @@ mobile-detect@^1.4.2:
   resolved "https://registry.yarnpkg.com/mobile-detect/-/mobile-detect-1.4.4.tgz#686c74e92d3cc06b09a9b3594b7b981494b137f6"
   integrity sha512-vTgEjKjS89C5yHL5qWPpT6BzKuOVqABp+A3Szpbx34pIy3sngxlGaFpgHhfj6fKze1w0QKeOSDbU7SKu7wDvRQ==
 
-mobx@4.8.0:
-  version "4.8.0"
-  resolved "https://registry.npm.taobao.org/mobx/download/mobx-4.8.0.tgz#6059feb9e0d3440acca5ae192daad63198b1180f"
-  integrity sha1-YFn+ueDTRArMpa4ZLarWMZixGA8=
-
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -7912,9 +7886,9 @@ querystring@0.2.0:
   integrity sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=
 
 querystringify@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.1.1.tgz#60e5a5fd64a7f8bfa4d2ab2ed6fdf4c85bad154e"
-  integrity sha512-w7fLxIRCRT7U8Qu53jQnJyPkYZIaR4n5151KMfcJlO/A9397Wxb1amJvROTK6TOnp7PfoAmg/qXiNHI+08jRfA==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
+  integrity sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==
 
 quick-lru@^1.0.0:
   version "1.1.0"
@@ -9983,9 +9957,9 @@ url-loader@^2.0.0:
     schema-utils "^2.5.0"
 
 url-parse@^1.4.3:
-  version "1.4.7"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.4.7.tgz#a8a83535e8c00a316e403a5db4ac1b9b853ae278"
-  integrity sha512-d3uaVyzDB9tQoSXFvuSUNFibTd9zxd2bkVrDRvF5TmvWWQwqE4lgYJ5m+x1DbecWkw+LK4RNl2CU1hHuOKPVlg==
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.3.tgz#71c1303d38fb6639ade183c2992c8cc0686df862"
+  integrity sha512-IIORyIQD9rvj0A4CLWsHkBBJuNqWpFQe224b6j9t/ABmquIS0qDU2pY6kl6AuOrL5OkCXHMCFNe1jBcuAggjvQ==
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
