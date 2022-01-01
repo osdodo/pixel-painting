@@ -2,7 +2,7 @@
 
 ```bash
 # install Taro 
-yarn global add @tarojs/cli@2.0.4
+yarn global add @tarojs/cli@3.3.19
 
 # install all this dependencies.
 yarn

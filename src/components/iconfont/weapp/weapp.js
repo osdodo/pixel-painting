@@ -19,14 +19,14 @@ Component({
       value: 18,
       observer: function(size) {
         this.setData({
-          svgSize: size / 750 * wx.getSystemInfoSync().windowWidth,
+          svgSize: size,
         });
       },
     },
   },
   data: {
     colors: '',
-    svgSize: 18 / 750 * wx.getSystemInfoSync().windowWidth,
+    svgSize: 18,
     quot: '"',
     isStr: true,
   },

@@ -1,12 +1,12 @@
 {
   "miniprogramRoot": "dist/",
   "projectname": "pixel-painting",
-  "description": "",
+  "description": "像素绘画小程序",
   "appid": "wx85bfd6f8d48a5f91",
   "setting": {
-    "urlCheck": false,
-    "es6": true,
-    "enhance": false,
+    "urlCheck": true,
+    "es6": false,
+    "enhance": true,
     "postcss": false,
     "preloadBackgroundData": false,
     "minified": false,
@@ -14,13 +14,14 @@
     "coverView": true,
     "nodeModules": false,
     "autoAudits": false,
-    "showShadowRootInWxmlPanel": true,
+    "showShadowRootInWxmlPanel": false,
     "scopeDataCheck": false,
     "uglifyFileName": false,
     "checkInvalidKey": true,
     "checkSiteMap": true,
     "uploadWithSourceMap": true,
     "compileHotReLoad": false,
+    "lazyloadPlaceholderEnable": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
     "useApiHostProcess": true,
@@ -30,33 +31,18 @@
       "outputPath": ""
     },
     "enableEngineNative": false,
-    "bundle": false,
-    "useIsolateContext": true,
-    "useCompilerModule": true,
-    "userConfirmedUseCompilerModuleSwitch": false,
+    "useIsolateContext": false,
     "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
-    "minifyWXSS": true
+    "minifyWXSS": true,
+    "disableUseStrict": false,
+    "showES6CompileOption": false,
+    "useCompilerPlugins": false,
+    "minifyWXML": true
   },
   "compileType": "miniprogram",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
-  "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
-    "plugin": {
-      "list": []
-    },
-    "game": {
-      "list": []
-    },
-    "miniprogram": {
-      "list": []
-    }
-  }
+  "condition": {}
 }

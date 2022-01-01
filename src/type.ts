@@ -1,0 +1,1 @@
+export type DividingLineType = 0 | 1 | 2 | 3

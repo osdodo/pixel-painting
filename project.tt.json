@@ -1,0 +1,13 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "pixel-painting",
+  "description": "像素绘画小程序",
+  "appid": "touristappid",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram"
+}
