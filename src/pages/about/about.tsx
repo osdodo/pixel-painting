@@ -14,7 +14,7 @@ const About = () => {
                 <Text className="planet right"></Text>
                 <Text style="color:#7c7b7b;">欢迎来到真实的荒漠</Text>
             </View>
-            <View className="info">联系方式：dodomatrix@protonmail.com</View>
+            <View className="info">联系方式：osdodo@qq.com</View>
         </View>
     );
 };
