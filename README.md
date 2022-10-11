@@ -1,17 +1,14 @@
 ## Usage
 
 ```bash
-# install Taro 
-yarn global add @tarojs/cli@3.3.19
-
 # install all this dependencies.
-yarn
+pnpm i
 
 # run
-yarn dev:weapp
+pnpm dev:weapp
 
 # build
-yarn build:weapp
+pnpm build:weapp
 ```
 
 ![qrcode](qrcode.jpg)
