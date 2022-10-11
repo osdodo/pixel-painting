@@ -58,6 +58,7 @@
     "@babel/core": "^7.19.3",
     "@tarojs/mini-runner": "3.5.6",
     "@tarojs/plugin-framework-react": "^3.5.6",
+    "@tarojs/plugin-platform-swan": "^3.5.6",
     "@tarojs/plugin-platform-weapp": "^3.5.6",
     "@tarojs/webpack-runner": "3.5.6",
     "@types/react": "^18.0.21",

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import Taro, { useShareAppMessage } from '@tarojs/taro';
 import { View, Text, Canvas } from '@tarojs/components';
 import CustomNavigation from '../../components/CustomNavigation';
@@ -30,8 +30,6 @@ import {
 
 import './index.less';
 
-var screenWidth = 0;
-
 const Index = () => {
     const [penTool, setPenTool] = useRecoilState(penToolState);
     const [showPickingTool, setShowPickingTool] = useRecoilState(
@@ -41,19 +39,17 @@ const Index = () => {
     const dividingLineTool = useRecoilValue(dividingLineToolState);
     const eraserTool = useRecoilValue(eraserToolState);
     const showActionSheet = useRecoilValue(showActionSheetState);
+    const screenWidthRef = useRef(0);
 
     useEffect(() => {
-        screenWidth = Taro.getSystemInfoSync().screenWidth;
-        Taro.cloud.init({
-            traceUser: true,
-        });
+        screenWidthRef.current = Taro.getSystemInfoSync().screenWidth;
     }, []);
 
     useEffect(() => {
         if (showGridTool) {
             drawGrid({
                 canvasId: gridLayerId,
-                canvasW: screenWidth,
+                canvasW: screenWidthRef.current,
                 brushW: penTool.brushW,
             });
         }
@@ -62,7 +58,7 @@ const Index = () => {
     useEffect(() => {
         drawLine({
             canvasId: dividinglineLayerId,
-            canvasW: screenWidth,
+            canvasW: screenWidthRef.current,
             dividingLineType: dividingLineTool.type,
         });
     }, [dividingLineTool]);
@@ -102,7 +98,7 @@ const Index = () => {
 
                 drawCanvas({
                     ctx,
-                    canvasW: screenWidth,
+                    canvasW: screenWidthRef.current,
                     touchX: e.touches[0].x,
                     touchY: e.touches[0].y,
                     brushW: penTool.brushW,
@@ -131,7 +127,7 @@ const Index = () => {
 
             drawCanvas({
                 ctx,
-                canvasW: screenWidth,
+                canvasW: screenWidthRef.current,
                 touchX: e.touches[0].x,
                 touchY: e.touches[0].y,
                 brushW: penTool.brushW,
@@ -148,8 +144,7 @@ const Index = () => {
         return {
             title: '像素涂画',
             path: '/pages/index/index',
-            imageUrl:
-                'cloud://pixel-painting-bkykm.7069-pixel-painting-bkykm-1301723573/share.jpeg',
+            imageUrl: 'https://s2.loli.net/2022/10/11/WPZLQlKIV2zi9Ca.jpg',
         };
     });
 

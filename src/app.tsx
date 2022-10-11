@@ -9,19 +9,8 @@ if (typeof global !== 'undefined') {
     (global as any).Window = function Window() {};
 }
 
-class App extends Component {
-    componentDidMount() {}
-
-    componentDidShow() {}
-
-    componentDidHide() {}
-
-    componentDidCatchError() {}
-
-    // this.props.children 是将要会渲染的页面
-    render() {
-        return <RecoilRoot>{this.props.children}</RecoilRoot>;
-    }
-}
+const App = ({ children }) => {
+    return <RecoilRoot>{children}</RecoilRoot>;
+};
 
 export default App;

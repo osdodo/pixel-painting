@@ -18,7 +18,9 @@ const CustomNavigation = ({ title = '像素涂画' }: { title: string }) => {
         Taro.getSystemInfo({
             success: res => {
                 const statusBarHeight = res.statusBarHeight;
-                setStatusBarHeight(statusBarHeight);
+                if (statusBarHeight) {
+                    setStatusBarHeight(statusBarHeight);
+                }
             },
             fail: () => {},
         });
@@ -46,9 +48,7 @@ const CustomNavigation = ({ title = '像素涂画' }: { title: string }) => {
 
     const onReward = useCallback(() => {
         Taro.previewImage({
-            urls: [
-                'cloud://pixel-painting-bkykm.7069-pixel-painting-bkykm-1301723573/admire-qrcode.jpg',
-            ],
+            urls: ['https://s2.loli.net/2022/10/11/TkFhvRybeApO2xf.jpg'],
         });
     }, []);
 
