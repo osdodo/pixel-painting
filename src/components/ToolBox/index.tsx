@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import Taro from '@tarojs/taro';
-import { View, Text, Picker, ScrollView, Slider } from '@tarojs/components';
+import { View, Text, Picker, Slider } from '@tarojs/components';
 import IconFont from '../iconfont';
 import { useRecoilState } from 'recoil';
 import {
@@ -9,10 +9,9 @@ import {
     dividingLineToolState,
     showPickingToolState,
     eraserToolState,
-} from '../../store/atom';
-
-import { save, clearCanvas } from '../../utils/helper';
-import { drawLayerId, dividingLineList } from '../../config';
+} from '@/store/atom';
+import { save, clearCanvas } from '@/utils/helper';
+import { drawLayerId, dividingLineList } from '@/config/index';
 
 import './index.less';
 
@@ -173,72 +172,84 @@ const ToolBox = () => {
 
     return (
         <View>
-            <ScrollView
-                className="tools"
-                scrollX
-                scrollWithAnimation
-                lowerThreshold={20}
-                upperThreshold={20}
-            >
+            <View className="tools">
                 <View className="options">
                     <View className="item" onClick={handleShowPenTool}>
-                        <IconFont name="pen" color={penTool.color} size={25} />
-                        <Text className="name">笔</Text>
+                        <View className="box">
+                            <IconFont
+                                name="pen"
+                                color={penTool.color}
+                                size={25}
+                            />
+                            <Text className="name">笔</Text>
+                        </View>
                     </View>
                     <View className="item" onClick={handleShowGridTool}>
-                        <IconFont
-                            name="wangge"
-                            size={25}
-                            color={showGridTool ? 'green' : '#ccc'}
-                        />
-                        <Text className="name">网格线</Text>
+                        <View className="box">
+                            <IconFont
+                                name="wangge"
+                                size={25}
+                                color={showGridTool ? 'green' : '#ccc'}
+                            />
+                            <Text className="name">网格线</Text>
+                        </View>
                     </View>
                     <View className="item">
                         <Picker
                             range={dividingLineList}
                             onChange={handleChangeDividingLine}
                         >
-                            <IconFont
-                                name="flip"
-                                size={25}
-                                color={
-                                    dividingLineTool.type !== 0
-                                        ? 'green'
-                                        : '#ccc'
-                                }
-                            />
-                            <Text className="name">对称轴</Text>
+                            <View className="box">
+                                <IconFont
+                                    name="flip"
+                                    size={25}
+                                    color={
+                                        dividingLineTool.type !== 0
+                                            ? 'green'
+                                            : '#ccc'
+                                    }
+                                />
+                                <Text className="name">对称轴</Text>
+                            </View>
                         </Picker>
                     </View>
                     <View className="item" onClick={handleShowPickingTool}>
-                        <IconFont
-                            name="quse"
-                            size={25}
-                            color={showPickingTool ? 'green' : '#ccc'}
-                        />
-                        <Text className="name">取色器</Text>
+                        <View className="box">
+                            <IconFont
+                                name="quse"
+                                size={25}
+                                color={showPickingTool ? 'green' : '#ccc'}
+                            />
+                            <Text className="name">取色器</Text>
+                        </View>
                     </View>
                     <View className="item" onClick={handleShowEraser}>
-                        <IconFont
-                            name="xiangpi"
-                            size={25}
-                            color={eraserTool.show ? 'green' : '#ccc'}
-                        />
-                        <Text className="name">橡皮</Text>
+                        <View className="box">
+                            <IconFont
+                                name="xiangpi"
+                                size={25}
+                                color={eraserTool.show ? 'green' : '#ccc'}
+                            />
+                            <Text className="name">橡皮</Text>
+                        </View>
                     </View>
                     <View className="item" onClick={handleClearCanvas}>
-                        <IconFont name="delete" size={25} />
-                        <Text className="name">清空</Text>
+                        <View className="box">
+                            <IconFont name="delete" size={25} />
+                            <Text className="name">清空</Text>
+                        </View>
                     </View>
                     <View className="item" onClick={handleSave}>
-                        <IconFont name="save" size={25} />
-                        <Text className="name">保存</Text>
+                        <View className="box">
+                            <IconFont name="save" size={25} />
+                            <Text className="name">保存</Text>
+                        </View>
                     </View>
                 </View>
-            </ScrollView>
+            </View>
             <View className="setting-box" style={penToolStyle}>
                 <View className="slider-box">
-                    <View className='label'>
+                    <View className="label">
                         <View>笔刷</View>
                         <View>尺寸</View>
                     </View>
@@ -269,7 +280,7 @@ const ToolBox = () => {
             />
             <View className="setting-box" style={eraserToolStyle}>
                 <View className="slider-box">
-                    <View className='label'>
+                    <View className="label">
                         <View>橡皮</View>
                         <View>尺寸</View>
                     </View>

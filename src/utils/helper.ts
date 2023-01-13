@@ -1,5 +1,5 @@
+import { DividingLineType } from '@/store/atom';
 import Taro from '@tarojs/taro';
-import { DividingLineType } from '../type';
 
 const drawRect = (
     ctx: Taro.CanvasContext,
@@ -23,100 +23,6 @@ const clearRect = (
 ) => {
     ctx.clearRect(x, y, w, h);
     ctx.draw(true);
-};
-
-const canvasToTempFilePath = (canvasId: string) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            Taro.canvasToTempFilePath({
-                canvasId: canvasId,
-                success: res => {
-                    resolve(res.tempFilePath);
-                },
-                fail: err => {
-                    reject(err);
-                },
-            });
-        }, 2000);
-    });
-};
-
-const saveImageToPhotosAlbum = (filePath: string) => {
-    return new Promise<void>((resolve, reject) => {
-        Taro.saveImageToPhotosAlbum({
-            filePath,
-            success: () => {
-                resolve();
-            },
-            fail: e => {
-                reject(e);
-            },
-        });
-    });
-};
-
-export const getImageData = ({
-    canvasId,
-    dx,
-    dy,
-    dWidth,
-    dHeight,
-}: {
-    canvasId: string;
-    dx: number;
-    dy: number;
-    dWidth: number;
-    dHeight: number;
-}): Promise<Uint8ClampedArray> => {
-    return new Promise((resolve, reject) => {
-        Taro.canvasGetImageData({
-            canvasId: canvasId,
-            x: dx,
-            y: dy,
-            width: dWidth,
-            height: dHeight,
-            success: res => {
-                console.log('res:', res);
-                resolve(res.data);
-            },
-            fail: err => {
-                reject(err);
-            },
-        });
-    });
-};
-
-export const putImageData = ({
-    canvasId,
-    dx,
-    dy,
-    dWidth,
-    dHeight,
-    imageData,
-}: {
-    canvasId: string;
-    dx: number;
-    dy: number;
-    dWidth: number;
-    dHeight: number;
-    imageData: Uint8ClampedArray;
-}) => {
-    return new Promise<void>((resolve, reject) => {
-        Taro.canvasPutImageData({
-            canvasId: canvasId,
-            x: dx,
-            y: dy,
-            width: dWidth,
-            height: dHeight,
-            data: imageData,
-            success: () => {
-                resolve();
-            },
-            fail: err => {
-                reject(err);
-            },
-        });
-    });
 };
 
 export const thresholdConvert = (
@@ -299,84 +205,70 @@ export const drawCanvas = ({
     }
 };
 
-export const save = (canvasId: string) => {
+export const save = async (canvasId: string) => {
     Taro.showLoading({
         title: '处理中',
     });
-    canvasToTempFilePath(canvasId)
-        .then((filePath: string) => saveImageToPhotosAlbum(filePath))
-        .then(() => {
-            Taro.hideLoading();
+    const { tempFilePath } = await Taro.canvasToTempFilePath({
+        canvasId,
+    });
+    try {
+        await Taro.saveImageToPhotosAlbum({
+            filePath: tempFilePath,
+        });
+        Taro.showToast({
+            title: '已保存',
+            icon: 'success',
+            duration: 2000,
+        });
+    } catch (error) {
+        if (error.errMsg.indexOf('auth') != -1) {
+            const tip = await Taro.showModal({
+                content: '同意访问您的相册，才能保存图片',
+                showCancel: false,
+            });
+            if (tip.confirm) {
+                Taro.openSetting();
+            }
+        } else {
             Taro.showToast({
-                title: '已保存',
-                icon: 'success',
+                title: '保存失败',
+                icon: 'error',
                 duration: 2000,
             });
-        })
-        .catch(e => {
-            if (e.errMsg.indexOf('auth') != -1) {
-                Taro.showModal({
-                    content: '同意访问您的相册，才能保存图片',
-                    showCancel: false,
-                    success: tip => {
-                        if (tip.confirm) {
-                            Taro.openSetting({
-                                success: () => {},
-                            });
-                        }
-                    },
-                });
-            } else {
-                Taro.showToast({
-                    title: '保存失败',
-                    icon: 'error',
-                    duration: 2000,
-                });
-            }
-            Taro.hideLoading();
-        });
+        }
+    }
+    Taro.hideLoading();
 };
 
-export const clearCanvas = (ctx: Taro.CanvasContext, canvasW: number) => {
-    Taro.showModal({
+export const clearCanvas = async (ctx: Taro.CanvasContext, canvasW: number) => {
+    const tip = await Taro.showModal({
         content: '确认清空画布吗？',
-        success: tip => {
-            if (tip.confirm) {
-                clearRect(ctx, 0, 0, canvasW, canvasW);
-            }
-        },
+        showCancel: false,
     });
+    if (tip.confirm) {
+        clearRect(ctx, 0, 0, canvasW, canvasW);
+    }
 };
 
-export const upload = (ctx: Taro.CanvasContext, canvasW: number) => {
-    return new Promise((resolve, reject) => {
-        Taro.chooseImage({
+export const upload = async (ctx: Taro.CanvasContext, canvasW: number) => {
+    try {
+        const { tempFilePaths } = await Taro.chooseImage({
             count: 1,
             sizeType: ['compressed'],
             sourceType: ['album'],
-            success: res => {
-                let tempFilePath = res.tempFilePaths[0];
-                Taro.getImageInfo({
-                    src: tempFilePath,
-                    success: res => {
-                        let dWidth = res.width * 0.5;
-                        let dHeight = res.height * 0.5;
-                        let dx = canvasW / 2 - dWidth / 2;
-                        let dy = canvasW / 2 - dHeight / 2;
-                        ctx.drawImage(tempFilePath, dx, dy, dWidth, dHeight);
-                        ctx.draw();
-                        resolve({ dx, dy, dWidth, dHeight });
-                    },
-                    fail: () => {
-                        reject();
-                    },
-                });
-            },
-            fail: () => {
-                reject();
-            },
         });
-    });
+        const tempFilePath = tempFilePaths[0];
+        const imgInfoRes = await Taro.getImageInfo({
+            src: tempFilePath,
+        });
+        let dWidth = imgInfoRes.width * 0.5;
+        let dHeight = imgInfoRes.height * 0.5;
+        let dx = canvasW / 2 - dWidth / 2;
+        let dy = canvasW / 2 - dHeight / 2;
+        ctx.drawImage(tempFilePath, dx, dy, dWidth, dHeight);
+        ctx.draw();
+    } catch (error) {}
 };
 
 export const rgbToHex = (r: number, g: number, b: number) => {

@@ -1,21 +1,21 @@
 const config = {
-  projectName: "pixel-painting",
-  date: "2021-12-31",
+  projectName: 'pixel-painting',
+  date: '2021-12-31',
   designWidth: 750,
   deviceRatio: {
     640: 2.34 / 2,
     750: 1,
     828: 1.81 / 2,
   },
-  sourceRoot: "src",
-  outputRoot: "dist",
+  sourceRoot: 'src',
+  outputRoot: 'dist',
   plugins: [],
   defineConstants: {},
   copy: {
     patterns: [],
     options: {},
   },
-  framework: "react",
+  framework: 'react',
   mini: {
     postcss: {
       pxtransform: {
@@ -31,15 +31,15 @@ const config = {
       cssModules: {
         enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
         config: {
-          namingPattern: "module", // 转换模式，取值为 global/module
-          generateScopedName: "[name]__[local]___[hash:base64:5]",
+          namingPattern: 'module', // 转换模式，取值为 global/module
+          generateScopedName: '[name]__[local]___[hash:base64:5]',
         },
       },
     },
   },
   h5: {
-    publicPath: "/",
-    staticDirectory: "static",
+    publicPath: '/',
+    staticDirectory: 'static',
     postcss: {
       autoprefixer: {
         enable: true,
@@ -48,17 +48,29 @@ const config = {
       cssModules: {
         enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
         config: {
-          namingPattern: "module", // 转换模式，取值为 global/module
-          generateScopedName: "[name]__[local]___[hash:base64:5]",
+          namingPattern: 'module', // 转换模式，取值为 global/module
+          generateScopedName: '[name]__[local]___[hash:base64:5]',
         },
       },
     },
   },
 };
 
-module.exports = function (merge) {
-  if (process.env.NODE_ENV === "development") {
-    return merge({}, config, require("./dev"));
+const path = require('path');
+
+module.exports = function(merge) {
+  config.alias = {
+    '@/components': path.resolve(__dirname, '..', 'src/components'),
+    '@/constant': path.resolve(__dirname, '..', 'src/constant'),
+    '@/services': path.resolve(__dirname, '..', 'src/services'),
+    '@/store': path.resolve(__dirname, '..', 'src/store'),
+    '@/utils': path.resolve(__dirname, '..', 'src/utils'),
+    '@/config': path.resolve(__dirname, '..', 'src/config'),
+    '@/package': path.resolve(__dirname, '..', 'package.json'),
+    '@/project': path.resolve(__dirname, '..', 'project.config.json'),
+  };
+  if (process.env.NODE_ENV === 'development') {
+    return merge({}, config, require('./dev'));
   }
-  return merge({}, config, require("./prod"));
+  return merge({}, config, require('./prod'));
 };

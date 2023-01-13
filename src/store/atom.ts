@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
-import { DividingLineType } from '../type';
+
+export type DividingLineType = 0 | 1 | 2 | 3
 
 export const showActionSheetState = atom({
     key: 'showActionSheetState',

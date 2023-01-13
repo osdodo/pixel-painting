@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text } from '@tarojs/components';
-import IconFont from '../../components/iconfont';
+import IconFont from '@/components/iconfont';
 
-import './about.less'
+import './about.less';
 
 const About = () => {
     return (

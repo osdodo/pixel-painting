@@ -1,9 +1,8 @@
 import React, { useEffect, useCallback, useRef } from 'react';
 import Taro, { useShareAppMessage } from '@tarojs/taro';
 import { View, Text, Canvas } from '@tarojs/components';
-import CustomNavigation from '../../components/CustomNavigation';
-import ToolBox from '../../components/ToolBox';
-
+import CustomNavigation from '@/components/CustomNavigation';
+import ToolBox from '@/components/ToolBox';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import {
     showActionSheetState,
@@ -12,21 +11,19 @@ import {
     showPickingToolState,
     dividingLineToolState,
     eraserToolState,
-} from '../../store/atom';
-
+} from '@/store/atom';
 import {
     drawCanvas,
     drawGrid,
     drawLine,
-    getImageData,
     rgbToHex,
-} from '../../utils/helper';
+} from '@/utils/helper';
 import {
     backgroundLayerId,
     dividinglineLayerId,
     drawLayerId,
     gridLayerId,
-} from '../../config';
+} from '@/config/index';
 
 import './index.less';
 
@@ -64,38 +61,34 @@ const Index = () => {
     }, [dividingLineTool]);
 
     const handleTouchStart = useCallback(
-        e => {
+        async e => {
             if (showPickingTool) {
-                getImageData({
+                const { data } = await Taro.canvasGetImageData({
                     canvasId: drawLayerId,
-                    dx: e.touches[0].x,
-                    dy: e.touches[0].y,
-                    dWidth: 1,
-                    dHeight: 1,
-                }).then(data => {
-                    const r = data[0];
-                    const g = data[1];
-                    const b = data[2];
-                    const a = Number((data[3] / 255).toFixed(1));
-
-                    if (a >= 0.1) {
-                        if (!(r > 250 && g > 250 && b > 250)) {
-                            setPenTool(old => {
-                                return {
-                                    ...old,
-                                    color: rgbToHex(r, g, b),
-                                };
-                            });
-
-                            if (showPickingTool) {
-                                setShowPickingTool(false);
-                            }
+                    x: e.touches[0].x,
+                    y: e.touches[0].y,
+                    width: 1,
+                    height: 1,
+                });
+                const r = data[0];
+                const g = data[1];
+                const b = data[2];
+                const a = Number((data[3] / 255).toFixed(1));
+                if (a >= 0.1) {
+                    if (!(r > 250 && g > 250 && b > 250)) {
+                        setPenTool(old => {
+                            return {
+                                ...old,
+                                color: rgbToHex(r, g, b),
+                            };
+                        });
+                        if (showPickingTool) {
+                            setShowPickingTool(false);
                         }
                     }
-                });
+                }
             } else {
                 const ctx = Taro.createCanvasContext(drawLayerId);
-
                 drawCanvas({
                     ctx,
                     canvasW: screenWidthRef.current,
@@ -122,9 +115,7 @@ const Index = () => {
                 });
                 return;
             }
-
             const ctx = Taro.createCanvasContext(drawLayerId);
-
             drawCanvas({
                 ctx,
                 canvasW: screenWidthRef.current,

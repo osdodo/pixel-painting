@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Text, Button } from '@tarojs/components';
-import IconFont from '../iconfont';
-
 import { useRecoilState } from 'recoil';
-import { showActionSheetState } from '../../store/atom';
+import { showActionSheetState } from '@/store/atom';
+import IconFont from '../iconfont';
 
 import './index.less';
 
