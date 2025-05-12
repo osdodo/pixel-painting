@@ -10,5 +10,3 @@ pnpm dev:weapp
 # build
 pnpm build:weapp
 ```
-
-![qrcode](qrcode.jpg)
